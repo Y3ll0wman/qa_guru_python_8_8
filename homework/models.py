@@ -30,7 +30,7 @@ class Product:
             Если продуктов не хватает, то выбросите исключение ValueError
         """
         if self.check_quantity(quantity_to_buy):
-            # Если продуктов достаточно, уменьшаем количество в наличии
+            # Если продуктов достаточно, уменьшаем количество в наличии на складе
             self.quantity -= quantity_to_buy
 
         else:
@@ -92,11 +92,16 @@ class Cart:
         В этом случае нужно выбросить исключение ValueError
         """
         # Проверить, хватает ли продуктов на складе для покупки
-        for product, quantity in self.products.items():
-            if not product.check_quantity(quantity):
-                raise ValueError(f"Недостаточное количество продукта '{product.name}' для покупки")
+        # for product, quantity in self.products.items():
+        #     if not product.check_quantity(quantity):
+        #         raise ValueError(f"Недостаточное количество продукта '{product.name}' для покупки")
+        #
+        # # Если все продукты доступны, уменьшить их количество на складе и очистить корзину
+        # for product, quantity in self.products.items():
+        #     product.quantity -= quantity
+        # self.clear()
 
-        # Если все продукты доступны, уменьшить их количество на складе и очистить корзину
         for product, quantity in self.products.items():
-            product.quantity -= quantity
+            product.buy(quantity)
+
         self.clear()

@@ -73,7 +73,7 @@ class TestCart:
         assert cart.products[product] == 1
 
         # Добавить продукта, который уже есть в корзине
-        cart.add_product(product, buy_count=2)
+        cart.add_product(product, 2)
 
         assert cart.products[product] == 3
 
@@ -84,10 +84,21 @@ class TestCart:
 
         assert product not in cart.products
 
+        # Удаляется столько же сколько есть в корзине
+        cart.add_product(product, 5)
+        cart.remove_product(product, 5)
+
+        assert product not in cart.products
+
+        # удаляется больше чем есть в корзине
+        cart.add_product(product,2)
+        cart.remove_product(product,5)
+
+        assert product not in cart.products
+
         # Добавить два продукта в корзину и удалить один
-        cart.add_product(product)
-        cart.add_product(product)
-        cart.remove_product(product, remove_count=1)
+        cart.add_product(product, 2)
+        cart.remove_product(product, 1)
 
         assert cart.products[product] == 1
 
@@ -100,7 +111,7 @@ class TestCart:
 
     def test_get_total_price(self, cart, product):
         # Рассчитать общую стоимость продуктов в корзине
-        cart.add_product(product, buy_count=3)
+        cart.add_product(product, 3)
         total_price = cart.get_total_price()
 
         assert total_price == 300
@@ -108,7 +119,7 @@ class TestCart:
     def test_buy(self, cart, product):
         # Совершить покупку
         product.quantity = 5
-        cart.add_product(product, buy_count=3)
+        cart.add_product(product, 3)
         cart.buy()
 
         assert not cart.products
@@ -123,7 +134,7 @@ class TestCart:
 
         # Купить продукт, которого не хватает на складе
         product.quantity = 2
-        cart.add_product(product, buy_count=3)
+        cart.add_product(product, 3)
 
         with pytest.raises(ValueError):
             cart.buy()
